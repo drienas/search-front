@@ -59,12 +59,12 @@ Vue.prototype.$rheight = (win, el) => {
 
 Vue.prototype.$columns = async (id) => {
   return [];
-  let data = await Vue.prototype.$http.get(
-    `${Vue.prototype.$endpoints.stammdaten}/api/pdv/spalten/`
-  );
-  return data.status === 200
-    ? data.data.filter((x) => x.pdv_definition_id === id)
-    : [];
+  // let data = await Vue.prototype.$http.get(
+  //   `${Vue.prototype.$endpoints.stammdaten}/api/pdv/spalten/`
+  // );
+  // return data.status === 200
+  //   ? data.data.filter((x) => x.pdv_definition_id === id)
+  //   : [];
 };
 
 Vue.prototype.$isElectron =
