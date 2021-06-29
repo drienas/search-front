@@ -9,7 +9,7 @@ import Constants from './constants';
   };
   switch (Constants.mode) {
     case 'development':
-      eps.esapi = `${Constants.edv}:${Constants.esapi}`;
+      eps.esapi = `${Constants.edv}`;
       break;
   }
   Vue.prototype.$endpoints = eps;

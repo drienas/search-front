@@ -1,7 +1,7 @@
 export default {
   // mode: process.env.NODE_ENV,
   mode: 'development',
-  edv: 'http://cloud.dieschneidergruppe.de',
+  edv: 'https://search.cloud.dieschneidergruppe.de',
   pdf: 'https://cdn1.dieschneidergruppe.de/fex',
   jr6: 'http://172.17.89.230',
   jr4: 'http://172.17.89.251',
