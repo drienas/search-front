@@ -3,15 +3,10 @@ import Constants from './constants';
 
 (function generateEndpoints() {
   let eps = {
-    stammdaten: `${Constants.jr4}:${Constants.sd}`,
-    esapi: `${Constants.jr4}:${Constants.esapi}`,
-    pdf: `${Constants.pdf}`,
+    stammdaten: Constants.sd,
+    esapi: Constants.esapi,
+    pdf: Constants.pdf,
   };
-  switch (Constants.mode) {
-    case 'development':
-      eps.esapi = `${Constants.edv}`;
-      break;
-  }
   Vue.prototype.$endpoints = eps;
 })();
 
@@ -59,12 +54,6 @@ Vue.prototype.$rheight = (win, el) => {
 
 Vue.prototype.$columns = async () => {
   return [];
-  // let data = await Vue.prototype.$http.get(
-  //   `${Vue.prototype.$endpoints.stammdaten}/api/pdv/spalten/`
-  // );
-  // return data.status === 200
-  //   ? data.data.filter((x) => x.pdv_definition_id === id)
-  //   : [];
 };
 
 Vue.prototype.$isElectron =

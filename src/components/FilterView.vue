@@ -693,7 +693,6 @@ export default {
     this.$http
       .get(`${this.$wib}/612`)
       .then((res) => {
-        console.log(res);
         if (res.status === 200) {
           this.aktionen = res.data.sort(
             (a, b) => parseInt(b.key) - parseInt(a.key)

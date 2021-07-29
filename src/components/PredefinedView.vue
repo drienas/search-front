@@ -2,7 +2,7 @@
   <div id="predefined-view">
     <loading-modal :show="isLoading" />
     <h1 class="text-3xl font-bold m-5" id="h1header">
-      Fahrzeugsuche <small>v{{ version }}</small>
+      Fahrzeugsuche <small>v{{ version }}</small> <logindata />
     </h1>
     <div class="m-5 grid grid-cols-12" id="resHeader">
       <div class="col-span-2">
@@ -368,7 +368,6 @@ export default {
                 .replace("Gebrauchtwagen", "GW")
                 .replace("Werkstattwagen", "WW")
             : null;
-        //(this.lastIndex !== "cars_vk")
         else
           x.gebrauchtyp_fzgtool = x.gebrauchtyp_fzgtool
             ? x.gebrauchtyp_fzgtool
@@ -419,7 +418,6 @@ export default {
         this.data = this.data.reverse();
         return;
       }
-      console.log(attr);
       switch (attr) {
         case "resCommShort":
           attr = "reserviertComment";
