@@ -5,5 +5,6 @@ export default {
   sd: process.env.VUE_APP_STAMMDATEN || null,
   mainUrl: process.env.VUE_APP_MAIN || null,
   wib: process.env.VUE_APP_WIB || null,
+  remote: process.env.VUE_APP_ISREMOTE || false,
   elevatedUsers: ['C745', 'C193', 'A999'],
 };

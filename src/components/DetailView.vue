@@ -1,8 +1,5 @@
 <template>
   <div id="car-details" class="m-5">
-    <!-- <pre>
-      {{ reserviert }}
-    </pre> -->
     <loading-modal :show="isLoading" />
     <div v-show="!isLoading">
       <h1 class="text-xl font-bold">
@@ -28,7 +25,13 @@
             : ""
         }}
       </h1>
-      <!-- <pre>{{ carData }}</pre> -->
+      <button
+        v-if="isRemote"
+        class="mt-1 mr-5 bg-red-400 text-white font-bold py-1 px-5 rounded-lg hover:bg-red-500"
+        @click="close"
+      >
+        Schließen
+      </button>
       <p class="text-base italic">
         {{
           carData.bestellnummer
@@ -124,7 +127,7 @@
         </span>
       </p>
       <div class="grid grid-cols-2" style="width: 25rem">
-        <div class="col-span-1">
+        <div class="col-span-1" v-if="!isRemote">
           <button
             class="mt-1 mr-5 bg-teal-400 hover:bg-teal-500 text-white font-bold py-1 px-5 rounded-lg"
             @click="openJR"
@@ -132,7 +135,7 @@
             JobRouter
           </button>
         </div>
-        <div class="col-span-1">
+        <div class="col-span-1" v-if="!isRemote">
           <button
             class="mt-1 mr-5 bg-teal-400 hover:bg-teal-500 text-white font-bold py-1 px-5 rounded-lg"
             @click="openMobile"
@@ -155,12 +158,19 @@
             Reservieren
           </button>
         </div>
-        <div class="col-span-1">
+        <div class="col-span-1" v-if="!isRemote">
           <button
             class="mt-1 mr-5 bg-teal-400 hover:bg-teal-500 text-white font-bold py-1 px-5 rounded-lg"
             @click="openPreisblatt"
           >
             Preisblatt
+          </button>
+        </div>
+        <div class="col-span-1" v-if="isRemote">
+          <button
+            class="mt-1 mr-5 bg-teal-400 hover:bg-teal-500 text-white font-bold py-1 px-5 rounded-lg"
+          >
+            Kaufantrag
           </button>
         </div>
         <div class="col-span-5"></div>
@@ -173,11 +183,25 @@
               v-if="images.length > 1"
               >{{ images.length }} Bilder</span
             >
-            <img class="mb-3 w-full" :src="image" />
+            <img
+              :class="{
+                'mb-3': true,
+                'w-full': !isRemote,
+                'w-1/4': isRemote,
+              }"
+              :src="image"
+            />
           </div>
           <!-- <div class="col-span-6"></div> -->
           <div class="p-0 m-0" v-if="images.length > 1">
-            <a @click="prevImage" class="hover:cursor-pointer">
+            <a
+              @click="prevImage"
+              :class="{
+                'hover:cursor-pointer': true,
+                'float-left': isRemote,
+                'ml-20': isRemote,
+              }"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-6 w-6"
@@ -192,9 +216,38 @@
                   d="M7 16l-4-4m0 0l4-4m-4 4h18"
                 /></svg
             ></a>
+            <a
+              v-if="isRemote"
+              @click="nextImage"
+              :class="{
+                'hover:cursor-pointer': true,
+                'float-left': isRemote,
+                'ml-40': isRemote,
+              }"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                /></svg
+            ></a>
           </div>
-          <div class="p-0 m-0" v-if="images.length > 1">
-            <a @click="nextImage" class="hover:cursor-pointer float-right">
+          <div class="p-0 m-0" v-if="images.length > 1 && !isRemote">
+            <a
+              @click="nextImage"
+              :class="{
+                'hover:cursor-pointer': true,
+                'float-right': !isRemote,
+              }"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-6 w-6"
@@ -322,6 +375,7 @@
 export default {
   data() {
     return {
+      isRemote: false,
       isLoading: true,
       type: null,
       id: null,
@@ -350,6 +404,9 @@ export default {
     },
   },
   methods: {
+    close() {
+      window.close();
+    },
     openJR() {
       this.$openExternal(
         `http://intranet.dieschneidergruppe.de/ntlm/index.php?cmd=StepScreen&jrprocessname=AllgemeineFunktionen&jrversion=1&jrstep=10&tb_typ=${this.type}&tb_fzg_id=${this.id}`
@@ -490,6 +547,10 @@ export default {
         this.image = this.images[0];
 
         if (this.hasImage) return;
+        if (this.isRemote) {
+          this.hasImage = false;
+          return;
+        }
 
         /**
          *
@@ -623,6 +684,8 @@ export default {
     },
   },
   async beforeMount() {
+    this.isRemote = this.$isRemote;
+    console.log(this.isRemote);
     this.type = this.$route.params.type;
     this.id = this.$route.params.id;
     this.showDetails = this.$ausstattungen;

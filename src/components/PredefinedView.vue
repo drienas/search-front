@@ -443,9 +443,13 @@ export default {
     },
     openJR(id) {
       let type = this.lastIndex === "cars_vk" ? "NW" : "GW";
-      if (!this.$isElectron)
-        this.$router.push({ name: "details", params: { id, type } });
-      else this.$openPopup(`details/${type}/${id}`);
+      if (!this.$isElectron) {
+        let routeData = this.$router.resolve({
+          name: "details",
+          params: { id, type },
+        });
+        window.open(routeData.href, "_blank");
+      } else this.$openPopup(`details/${type}/${id}`);
     },
   },
   async beforeMount() {

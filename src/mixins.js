@@ -13,6 +13,8 @@ import Constants from './constants';
 Vue.prototype.$wib = Constants.wib;
 Vue.prototype.$version = require('../package.json').version;
 
+Vue.prototype.$isRemote = Constants.remote;
+
 Vue.prototype.$http = {
   async get(url) {
     let res = await fetch(url);
