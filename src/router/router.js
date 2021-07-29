@@ -47,10 +47,11 @@ router.beforeEach(async (to, from, next) => {
       // );
     }
   }
+  store.dispatch('updateToken');
 
   if (!valid && to.name !== 'login') {
     localStorage.removeItem('token');
-    // store.dispatch('updateToken');
+    store.dispatch('updateToken');
     next({ name: 'login' });
   } else if (!valid && to.name === 'login') {
     next();

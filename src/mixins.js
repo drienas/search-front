@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Constants from './constants';
 
+import store from './store/store';
+
 (function generateEndpoints() {
   let eps = {
     stammdaten: Constants.sd,
@@ -17,7 +19,12 @@ Vue.prototype.$isRemote = Constants.remote;
 
 Vue.prototype.$http = {
   async get(url) {
-    let res = await fetch(url);
+    const token = store.state.token || null;
+    let res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     let data;
     if (res.status === 200) {
       data = await res.json();
@@ -25,11 +32,13 @@ Vue.prototype.$http = {
     return { status: res.status, data };
   },
   async post(url, body) {
+    const token = store.state.token || null;
     body = JSON.stringify(body);
     let res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body,
     });
