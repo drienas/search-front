@@ -169,8 +169,9 @@
         <div class="col-span-1" v-if="isRemote">
           <button
             class="mt-1 mr-5 bg-teal-400 hover:bg-teal-500 text-white font-bold py-1 px-5 rounded-lg"
+            @click="openOrder"
           >
-            Kaufantrag
+            Bestellen
           </button>
         </div>
         <div class="col-span-5"></div>
@@ -425,6 +426,15 @@ export default {
       this.$openExternal(
         `http://intranet.dieschneidergruppe.de/data/DSG_Module/preisblatt.php?preisblattid=${pbId}&fzgid=${this.id}`
       );
+    },
+    openOrder() {
+      let id = this.id;
+      if (this.$isElectron) return;
+      let routeData = this.$router.resolve({
+        name: "order",
+        params: { id },
+      });
+      window.open(routeData.href, "_blank");
     },
     setReserveString(info) {
       if (!info) {
