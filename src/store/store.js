@@ -29,7 +29,6 @@ export default new Vuex.Store({
       ctx.commit('SET_USERDATA', payload);
     },
     cacheCar(ctx, payload) {
-      console.log(`Store Dispatch`, payload);
       ctx.commit('CACHE_CAR', payload);
     },
   },

@@ -54,6 +54,8 @@
     <button
       class="mt-1 mr-5 bg-teal-400 text-white font-bold py-1 px-5 rounded-lg"
       :class="[{ 'hover:bg-teal-500': canOrder }, { 'bg-teal-600': !canOrder }]"
+      :disabled="!canOrder"
+      @click="order"
     >
       Bestellung absenden
     </button>
@@ -65,7 +67,7 @@ export default {
   data() {
     return {
       id: null,
-      carData: null,
+      carData: {},
       orderData: {
         orderTransport: false,
         orderType: null,
@@ -81,10 +83,37 @@ export default {
         (this.orderData.orderType === "lager" || this.orderData.customerName)
       );
     },
+    userData() {
+      return this.$store.state.userdata;
+    },
   },
   methods: {
     close() {
       this.$router.go(-1);
+    },
+    order() {
+      this.isLoading = true;
+      let data = {
+        ...this.orderData,
+        fullName: this.userData.fullName,
+        id: this.id,
+        vin: this.carData.vin,
+      };
+      this.$http
+        .post(`${this.$endpoints["esapi"]}/seax/order`, {
+          ...data,
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            alert(`Bestellung versendet!`);
+            window.close();
+          } else
+            throw `Fehler beim Bestellen, bitte versuchen Sie es noch einmal!`;
+        })
+        .catch((error) => {
+          alert(`Fehler! - ${error}`);
+        });
+      this.isLoading = false;
     },
   },
   mounted() {

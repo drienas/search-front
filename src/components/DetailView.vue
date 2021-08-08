@@ -510,6 +510,7 @@ export default {
       this.$store.dispatch("cacheCar", {
         id,
         carDescription,
+        vin: this.carData.fahrgestellnr ? this.carData.fahrgestellnr : null,
       });
 
       if (this.$isElectron) return;
