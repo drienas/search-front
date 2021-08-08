@@ -78,6 +78,9 @@ export default {
     };
   },
   computed: {
+    userData() {
+      return this.$store.state.userdata;
+    },
     shownHits() {
       return this.hits <= this.pagination ? this.hits : this.pagination;
     },
@@ -132,6 +135,8 @@ export default {
       let user = "A999";
       if (window.$system && window.$system.username)
         user = window.$system.username;
+
+      if (this.userData.id) user = this.userData.id;
 
       let query = JSON.parse(`{
                 "pagination": {

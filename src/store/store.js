@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     token: null,
     userdata: null,
+    carcache: [],
   },
   mutations: {
     SET_TOKEN(state, payload) {
@@ -14,6 +15,9 @@ export default new Vuex.Store({
     },
     SET_USERDATA(state, payload) {
       state.userdata = payload;
+    },
+    CACHE_CAR(state, payload) {
+      state.carcache.push(payload);
     },
   },
   actions: {
@@ -23,6 +27,10 @@ export default new Vuex.Store({
 
     updateUserData(ctx, payload) {
       ctx.commit('SET_USERDATA', payload);
+    },
+    cacheCar(ctx, payload) {
+      console.log(`Store Dispatch`, payload);
+      ctx.commit('CACHE_CAR', payload);
     },
   },
   modules: {},

@@ -209,7 +209,7 @@
             </div>
           </div>
           <div class="mt-3 mb-0">
-            <fieldset>
+            <fieldset class="float-left">
               <button
                 type="submit"
                 @click="formatQuery"
@@ -224,6 +224,93 @@
                 Löschen
               </button>
             </fieldset>
+            <button
+              class="float-right mr-5 bg-green-300 hover:bg-green-500 text-white font-bold py-1 px-5 rounded-lg"
+              @click.prevent="legende = !legende"
+            >
+              Standort-Legende
+            </button>
+            <div id="legende" v-show="legende">
+              <b>Unsere Standorte:</b><br />
+              <a
+                href="https://www.dieschneidergruppe.de/chemnitz"
+                target="_blank"
+                >Zentrallagerplatz<br
+              /></a>
+              <a
+                href="https://www.dieschneidergruppe.de/sportcenter-roehrsdorf"
+                target="_blank"
+                >02 - Röhrsdorf<br
+              /></a>
+              <a
+                href="https://www.dieschneidergruppe.de/burgstaedt"
+                target="_blank"
+                >03 - Burgstädt<br
+              /></a>
+              <a
+                href="https://www.dieschneidergruppe.de/frankenberg"
+                target="_blank"
+                >04 - Frankenberg<br
+              /></a>
+              <a
+                href="https://www.dieschneidergruppe.de/oederan"
+                target="_blank"
+                >05 - Oederan<br
+              /></a>
+              <a
+                href="https://www.dieschneidergruppe.de/standorte/business-center-mittweida"
+                target="_blank"
+                >06 - Mittweida<br
+              /></a>
+              <a
+                href="https://www.dieschneidergruppe.de/chemnitz"
+                target="_blank"
+                >07 - Chemnitz<br
+              /></a>
+              <a
+                href="https://www.dieschneidergruppe.de/business-center-chemnitz"
+                target="_blank"
+                >08 - Chemnitz Business-Center<br
+              /></a>
+              <a
+                href="https://www.dieschneidergruppe.de/zwickau"
+                target="_blank"
+                >09 - Zwickau<br
+              /></a>
+              <a
+                href="https://www.dieschneidergruppe.de/business-center-hof"
+                target="_blank"
+                >10 - Hof Business-Center<br
+              /></a>
+              <a href="https://www.dieschneidergruppe.de/plauen" target="_blank"
+                >11 - Plauen<br
+              /></a>
+              <a
+                href="https://www.dieschneidergruppe.de/land-rover-hof"
+                target="_blank"
+                >12 - Hof BOR<br
+              /></a>
+              <a
+                href="https://www.dieschneidergruppe.de/zwickau"
+                target="_blank"
+                >13 - Zwickau Business-Center<br
+              /></a>
+              <a
+                href="https://www.dieschneidergruppe.de/zwickau"
+                target="_blank"
+                >13 - Zwickau Lager<br
+              /></a>
+              <a
+                href="https://www.dieschneidergruppe.de/freiberg"
+                target="_blank"
+                >14 - Freiberg<br
+              /></a>
+              <a
+                href="https://www.dieschneidergruppe.de/plauen-seat"
+                target="_blank"
+                >15 - Plauen SEAT</a
+              >
+            </div>
           </div>
           <div class="col-span-2 mt-2" v-if="filter.ssettings.length > 0">
             <p class="text-sm text-gray-500">
@@ -392,6 +479,7 @@ export default {
       getriebe: [],
       aktionen: [],
       advancedFilters: false,
+      legende: false,
     };
   },
   methods: {
@@ -710,4 +798,13 @@ export default {
 </script>
 
 <style>
+#legende {
+  z-index: 1000;
+  position: fixed;
+  right: 1rem;
+  top: 0.1rem;
+  background-color: white;
+  margin: 1rem;
+  padding: 1rem;
+}
 </style>

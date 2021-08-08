@@ -126,6 +126,18 @@
           <button @click="cancelReservation">[-Reservierung löschen-]</button>
         </span>
       </p>
+      <div
+        class="ml-5"
+        v-if="reserviert.details && reserviert.details.bv_Nachname"
+      >
+        <small>
+          <b>Verkäufer:</b><br />
+          {{ reserviert.details.bv_Vorname }} {{ reserviert.details.bv_Nachname
+          }}<br />
+          {{ reserviert.details.bv_Filiale_akt }}<br />
+          {{ reserviert.details.telefon }}
+        </small>
+      </div>
       <div class="grid grid-cols-2" style="width: 25rem">
         <div class="col-span-1" v-if="!isRemote">
           <button
@@ -145,19 +157,6 @@
           </button>
         </div>
         <div class="col-span-5"></div>
-        <div class="col-span-1">
-          <button
-            class="mt-1 mr-5 bg-teal-400 text-white font-bold py-1 px-5 rounded-lg"
-            :class="[
-              { 'hover:bg-teal-500': !carData.fzgReserviertInfo },
-              { 'bg-teal-600': carData.fzgReserviertInfo },
-            ]"
-            :disabled="carData.fzgReserviertInfo"
-            @click="reserveCar"
-          >
-            Reservieren
-          </button>
-        </div>
         <div class="col-span-1" v-if="!isRemote">
           <button
             class="mt-1 mr-5 bg-teal-400 hover:bg-teal-500 text-white font-bold py-1 px-5 rounded-lg"
@@ -168,10 +167,40 @@
         </div>
         <div class="col-span-1" v-if="isRemote">
           <button
-            class="mt-1 mr-5 bg-teal-400 hover:bg-teal-500 text-white font-bold py-1 px-5 rounded-lg"
+            class="mt-1 mr-5 bg-teal-400 text-white font-bold py-1 px-5 rounded-lg"
+            :class="[
+              { 'hover:bg-teal-500': canBuy },
+              { 'bg-teal-600': !canBuy },
+            ]"
             @click="openOrder"
+            :disabled="!canBuy"
           >
             Bestellen
+          </button>
+          <p>
+            <small class="text-pink-600"
+              >Achtung! Nur unzugelassene Renault/Dacia Neuwagen können direkt
+              über das System bestellt werden!</small
+            >
+          </p>
+        </div>
+        <div class="col-span-1">
+          <input
+            v-if="!isReserved"
+            class="mt-1 placeholder-gray-500 border border-gray-500 text-teal-400 focus:border-teal-200 rounded-full pt-1 pb-1 pl-2 pr-2 text-sm focus:outline-none"
+            placeholder="reserviert für"
+            v-model="preReserveComment"
+          />
+          <button
+            class="mt-1 mr-5 bg-teal-400 text-white font-bold py-1 px-5 rounded-lg"
+            :class="[
+              { 'hover:bg-teal-500': canReserve },
+              { 'bg-teal-600': !canReserve },
+            ]"
+            :disabled="!canReserve"
+            @click="reserveCar"
+          >
+            Reservieren
           </button>
         </div>
         <div class="col-span-5"></div>
@@ -393,15 +422,42 @@ export default {
         tsexpired: null,
         name: null,
         cnum: null,
+        details: {},
       },
-      reserveComment: null,
+      reserveComment: "",
+      preReserveComment: "",
+      changingComment: false,
     };
   },
   computed: {
+    userData() {
+      return this.$store.state.userdata;
+    },
     actualDetails() {
       return this.filter
         ? this.hasDetails.filter((x) => new RegExp(this.filter, "g").test(x))
         : this.hasDetails;
+    },
+    canReserve() {
+      return (
+        ((s) =>
+          ((t) =>
+            /[a-zaöü.-]{3}/gi.test(t) && [...new Set(t.split(""))].length > 1)(
+            String(s).replace(/\s/g, "")
+          ))(this.preReserveComment) && !this.carData.fzgReserviertInfo
+      );
+    },
+    isReserved() {
+      return !!(this.reserviert && this.reserviert.cnum);
+    },
+    canBuy() {
+      return (
+        (this.carData.hersteller_dispo === "Renault" ||
+          this.carData.hersteller_dispo === "Dacia") &&
+        !this.carData.zl_info &&
+        (!this.isReserved ||
+          (this.isReserved && this.user === this.reserviert.cnum))
+      );
     },
   },
   methods: {
@@ -429,12 +485,43 @@ export default {
     },
     openOrder() {
       let id = this.id;
+
+      let carDescription = "";
+      carDescription = `${
+        this.carData.hersteller
+          ? this.carData.hersteller
+          : this.carData.hersteller_dispo
+          ? this.carData.hersteller_dispo
+          : ""
+      } ${
+        this.carData.modell
+          ? this.carData.modell
+          : this.carData.modell_dispo
+          ? this.carData.modell_dispo
+          : ""
+      } ${
+        this.carData.modelltyp
+          ? this.carData.modelltyp
+          : this.carData.model_text
+          ? this.carData.model_text
+          : ""
+      }`;
+
+      this.$store.dispatch("cacheCar", {
+        id,
+        carDescription,
+      });
+
       if (this.$isElectron) return;
-      let routeData = this.$router.resolve({
+      // let routeData = this.$router.resolve({
+      //   name: "order",
+      //   params: { id },
+      // });
+      // window.open(routeData.href, "_blank");
+      this.$router.push({
         name: "order",
         params: { id },
       });
-      window.open(routeData.href, "_blank");
     },
     setReserveString(info) {
       if (!info) {
@@ -454,26 +541,50 @@ export default {
         cnum: info[0],
         timestamp: info[2],
         tsexpired: info[3] ? info[3] : null,
+        details:
+          this.reserviert.details && this.reserviert.details.bv_Nachname
+            ? this.reserviert.details
+            : [],
       };
-    },
-    async changeComment() {
-      if (this.user !== this.reserviert.cnum) {
-        return;
-      }
 
+      this.$http
+        .get(`http://jobrouter4:5017/byc/${info[0]}`)
+        .then((res) =>
+          res.status === 200 ? (this.reserviert.details = res.data.data) : null
+        )
+        .catch((error) => console.error(error));
+    },
+    async changeComment(reload = true) {
+      // if (this.user !== this.reserviert.cnum) {
+      //   return;
+      // }
       if (
         !this.reserveComment ||
         this.reserveComment === this.carData.reserviertComment
       )
         return;
 
-      let res = await this.$http.post(`http://jobrouter4:5015/comment`, {
-        id: this.id,
-        comment: this.reserveComment,
-      });
+      if (this.changingComment) return;
+      this.changingComment = true;
+      let res = await this.$http.post(
+        `${this.$endpoints["esapi"]}/seax/comment`,
+        {
+          id: this.id,
+          comment: this.reserveComment,
+        }
+      );
 
-      if (res.status === 200) await this.gatherData();
-      else alert(`${res.status} - ${res.data.error}`);
+      if (res.status === 200) {
+        if (reload) {
+          this.isLoading = true;
+          let vm = this;
+          setTimeout(() => {
+            vm.isLoading = false;
+            window.location.reload();
+          }, 15000);
+        }
+      } else alert(`${res.status} - ${res.data.error}`);
+      this.changingComment = false;
     },
     async reserveCar() {
       await this.gatherData();
@@ -492,16 +603,31 @@ export default {
         data.cnum = window.$system.user.username;
         data.name = `${window.$system.user.lastname}, ${window.$system.user.prename}`;
       }
+      if (this.userData && this.userData.id) {
+        data.cnum = this.userData.id;
+        data.name = this.userData.fullName;
+      }
       let reserviertInfo = `${data.cnum}; ${data.name}; ${data.timestamp}`;
       let id = this.id;
 
-      let res = await this.$http.post(`http://jobrouter4:5015/reserve`, {
-        id,
-        reserviertInfo,
-      });
+      let res = await this.$http.post(
+        `${this.$endpoints["esapi"]}/seax/reserve`,
+        {
+          id,
+          reserviertInfo,
+        }
+      );
       if (res.status === 200) {
-        this.setReserveString(reserviertInfo);
+        this.reserveComment = this.preReserveComment;
+        this.changeComment(false);
+        this.isLoading = true;
+        let vm = this;
+        setTimeout(() => {
+          vm.isLoading = false;
+          window.location.reload();
+        }, 15000);
       } else {
+        console.log(res);
         if (!res.data.success) alert(`${res.status} - ${res.data.err}`);
         else alert(`${res.status} - ${res.data.message}`);
       }
@@ -519,22 +645,27 @@ export default {
         data.cnum = window.$system.user.username;
         data.name = `${window.$system.user.lastname}, ${window.$system.user.prename}`;
       }
+
+      if (this.userData && this.userData.id) {
+        data.cnum = this.userData.id;
+        data.name = this.userData.fullName;
+      }
+
       let id = this.id;
 
       let res = await this.$http.post(
-        `http://jobrouter4:5015/cancelreservation`,
+        `${this.$endpoints["esapi"]}/seax/cancelreservation`,
         {
           id,
         }
       );
       if (res.status === 200) {
-        this.carData.fzgReserviertInfo = "";
-        this.reserviert = null;
-        this.reserviert = {
-          timestamp: null,
-          name: null,
-          cnum: null,
-        };
+        this.isLoading = true;
+        let vm = this;
+        setTimeout(() => {
+          vm.isLoading = false;
+          window.location.reload();
+        }, 15000);
       }
     },
     async generateImage() {
@@ -603,8 +734,9 @@ export default {
       if (!data.success) return;
       data = data.car._source;
       data.zl_info = null;
-      if (data.erstzulassung_fzgtool) data.zl_info = data.erstzulassung_fzgtool;
-      else if (data.erstzulassung) data.zl_info = data.erstzulassung;
+      // if (data.erstzulassung_fzgtool) data.zl_info = data.erstzulassung_fzgtool;
+      // else
+      if (data.erstzulassung) data.zl_info = data.erstzulassung;
       const fDatum = (datum) =>
         datum
           ? ((d) =>
@@ -703,7 +835,7 @@ export default {
     let vm = this;
     setInterval(() => {
       vm.gatherData();
-    }, 30000);
+    }, 60000);
     this.generateImage();
   },
   mounted() {
@@ -713,6 +845,8 @@ export default {
 
     if (window.$system && window.$system.username)
       this.user = window.$system.username;
+
+    if (this.userData.id) this.user = this.userData.id;
   },
 };
 </script>
