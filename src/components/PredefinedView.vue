@@ -275,7 +275,7 @@ export default {
       this.columns =
         index === "cars_vk" ? this.fixedColumns.nw : this.fixedColumns.gw;
 
-      if (index === "cars_vk_gw") index = "cars_vk_gw_tmp";
+      // if (index === "cars_vk_gw") index = "cars_vk_gw_tmp";
       this.$http
         .post(`${this.$endpoints.esapi}/api/v2/${index}/filter/`, query)
         .then((res) => {

@@ -51,6 +51,16 @@
         class="placeholder-gray-500 border border-gray-500 text-teal-400 focus:border-teal-200 rounded-full pt-1 pb-1 pl-2 pr-2 text-sm focus:outline-none"
       />
     </div>
+    <div class="m-5">
+      <label for="bemerkung" class="text-lg mr-5"> Bemerkung</label>
+      <textarea
+        id="bemerkung"
+        v-model="orderData.bemerkung"
+        rows="4"
+        placeholder="Bemerkung"
+        class="w-1/4 resize placeholder-gray-500 border border-gray-500 text-teal-400 focus:border-teal-200 rounded-md pt-1 pb-1 pl-2 pr-2 text-sm focus:outline-none"
+      />
+    </div>
     <button
       class="mt-1 mr-5 bg-teal-400 text-white font-bold py-1 px-5 rounded-lg"
       :class="[{ 'hover:bg-teal-500': canOrder }, { 'bg-teal-600': !canOrder }]"
@@ -72,6 +82,7 @@ export default {
         orderTransport: false,
         orderType: null,
         customerName: null,
+        bemerkung: null,
       },
       isLoading: false,
     };
