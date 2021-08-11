@@ -107,6 +107,7 @@ export default {
       let data = {
         ...this.orderData,
         fullName: this.userData.fullName,
+        uid: this.userData.id,
         id: this.id,
         vin: this.carData.vin,
       };
