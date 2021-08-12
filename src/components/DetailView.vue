@@ -45,7 +45,13 @@
         {{ carData.fahrgestellnr ? `/ ${carData.fahrgestellnr}` : "" }}
       </p>
       <p class="text-base italic">
-        <span v-if="type === 'GW'">{{ carData.gebrauchtyp_fzgtool }}</span>
+        <span
+          v-if="
+            carData.gebrauchtyp_fzgtool === 'Gebrauchtwagen' ||
+            carData.gebrauchtyp_fzgtool === 'GW'
+          "
+          >Gebrauchtwagen</span
+        >
         <span v-else>{{ carData.gebrauchtyp }}</span>
       </p>
       <p class="text-pink-600 text-base font-bold" v-if="carData.strategisch">
