@@ -43,7 +43,7 @@ jobs:
           package-name: ${{ env.PACKAGE }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-  deploy:
+  cloud-update:
     needs: publish
     runs-on: ubuntu-latest
 
