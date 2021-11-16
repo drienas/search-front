@@ -58,7 +58,7 @@
         v-model="orderData.bemerkung"
         rows="4"
         placeholder="Bemerkung"
-        class="w-1/4 resize placeholder-gray-500 border border-gray-500 text-teal-400 focus:border-teal-200 rounded-md pt-1 pb-1 pl-2 pr-2 text-sm focus:outline-none"
+        class="w-1/4 resize placeholder-gray-500 border border-gray-500 text-black focus:border-teal-200 rounded-md pt-1 pb-1 pl-2 pr-2 text-sm focus:outline-none"
       />
     </div>
     <button
