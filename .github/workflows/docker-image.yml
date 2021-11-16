@@ -52,4 +52,4 @@ jobs:
 
     steps:
       - name: Push new Update to Cloud-Service
-      - run: curl --request POST --url ${{ env.PORTAINER_PUSH }}
+        run: curl --request POST --url ${{ env.PORTAINER_PUSH }}
