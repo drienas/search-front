@@ -1,24 +1,5 @@
-# pdvnew
+# Frontend Build Search-API
 
-## Project setup
-```
-npm install
-```
+Latest Build:
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+[![Docker Release](https://github.com/drienas/search-front/actions/workflows/docker-image.yml/badge.svg)](https://github.com/drienas/search-front/actions/workflows/docker-image.yml)

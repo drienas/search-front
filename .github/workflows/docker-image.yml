@@ -42,3 +42,14 @@ jobs:
           repo: ${{ env.REPO }}
           package-name: ${{ env.PACKAGE }}
           token: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    needs: publish
+    runs-on: ubuntu-latest
+
+    env:
+      PORTAINER_PUSH: ${{ secrets.PORTAINER_PUSH }}
+
+    steps:
+      - name: Push new Update to Cloud-Service
+      - run: curl --request POST --url ${{ env.PORTAINER_PUSH }}
