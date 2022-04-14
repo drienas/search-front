@@ -3,7 +3,17 @@
     <loading-modal :show="isLoading" />
     <h1 class="text-xl font-bold">{{ carData.carDescription }} bestellen</h1>
     <button
-      class="mt-1 mr-5 bg-red-400 text-white font-bold py-1 px-5 rounded-lg hover:bg-red-500"
+      class="
+        mt-1
+        mr-5
+        bg-red-400
+        text-white
+        font-bold
+        py-1
+        px-5
+        rounded-lg
+        hover:bg-red-500
+      "
       @click="close"
     >
       Schließen
@@ -21,7 +31,7 @@
       />
       <label for="orderTransport" class="mr-2">
         Transport durch DSG
-        <small>(PKW - 55€ netto / Master&Trafic 100€ netto)</small></label
+        <small>(PKW - 65€ netto / Master&Trafic 120€ netto)</small></label
       >
     </div>
     <div class="m-5">
@@ -48,7 +58,19 @@
         id="customerName"
         v-model="orderData.customerName"
         placeholder="Kundenname"
-        class="placeholder-gray-500 border border-gray-500 text-teal-400 focus:border-teal-200 rounded-full pt-1 pb-1 pl-2 pr-2 text-sm focus:outline-none"
+        class="
+          placeholder-gray-500
+          border border-gray-500
+          text-teal-400
+          focus:border-teal-200
+          rounded-full
+          pt-1
+          pb-1
+          pl-2
+          pr-2
+          text-sm
+          focus:outline-none
+        "
       />
     </div>
     <div class="m-5">
@@ -58,7 +80,21 @@
         v-model="orderData.bemerkung"
         rows="4"
         placeholder="Bemerkung"
-        class="w-1/4 resize placeholder-gray-500 border border-gray-500 text-black focus:border-teal-200 rounded-md pt-1 pb-1 pl-2 pr-2 text-sm focus:outline-none"
+        class="
+          w-1/4
+          resize
+          placeholder-gray-500
+          border border-gray-500
+          text-black
+          focus:border-teal-200
+          rounded-md
+          pt-1
+          pb-1
+          pl-2
+          pr-2
+          text-sm
+          focus:outline-none
+        "
       />
     </div>
     <button
