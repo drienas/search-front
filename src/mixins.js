@@ -219,6 +219,7 @@ Vue.prototype.$standorte = [
   'FIL - 13 - ZS - Lager',
   'FIL - 14 - FG - Freiberg',
   'FIL - 15 - PS - Plauen-SE',
+  'FIL - 16 - CS - Chemnitz-SE',
 ];
 
 Vue.prototype.$eigentuemer = [
@@ -236,6 +237,7 @@ Vue.prototype.$eigentuemer = [
   { value: 'RHPL', key: 'RHPL' },
   { value: 'RHHO', key: 'RHHO' },
   { value: 'RHFG', key: 'RHFG' },
+  { value: 'RHCS', key: 'RHCS' },
   { value: 'BOCH', key: 'BOCH' },
   { value: 'BOZK', key: 'BOZK' },
   { value: 'BOHO', key: 'BOHO' },
