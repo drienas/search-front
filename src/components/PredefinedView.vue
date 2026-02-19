@@ -110,7 +110,7 @@ export default {
       this.$http
         .post(`${this.$endpoints.esapi}/api/v3/cars_vk_full/full/`, {
           query,
-          size: 5,
+          size: 100,
           sources: [
             "fzg_id",
             "fzgReserviertInfo",
@@ -163,10 +163,14 @@ export default {
       this.lastIndex = index;
       this.isLoading = true;
       this.columns = [
-        ...this.fixedColumns.nw.slice(0, -3),
+        ...this.fixedColumns.nw.slice(0, -3).filter((x) => !["Leistung KW", "Listenpreis UPE brutto"].includes(x.titel)),
         {
           name: "ahid",
           titel: "Eigentümer",
+        },
+        {
+          name: "standort",
+          titel: "Standort",
         },
         {
           name: "resCommShort",
@@ -224,10 +228,14 @@ export default {
           name: "fzgReserviertInfo",
           titel: "Reserviert",
         },
-        ...this.fixedColumns.nw.slice(0, -3),
+        ...this.fixedColumns.nw.slice(0, -3).filter((x) => !["Leistung KW", "Listenpreis UPE brutto"].includes(x.titel)),
         {
           name: "ahid",
           titel: "Eigentümer",
+        },
+        {
+          name: "standort",
+          titel: "Standort",
         },
         {
           name: "resCommShort",
@@ -381,6 +389,7 @@ export default {
                 .replace("Gebrauchtwagen", "GW")
                 .replace("Werkstattwagen", "WW")
             : null;
+        if (x.gw_besteuerung) x.gw_besteuerung = x.gw_besteuerung.charAt(0).toUpperCase();
         x.erstzulassung_fzgtool = fEz(x.erstzulassung_fzgtool);
         x.erstzulassung = fEz(x.erstzulassung);
         if (!x.bestellnummer && x.ordernummer) x.bestellnummer = x.ordernummer;

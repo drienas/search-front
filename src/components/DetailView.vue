@@ -73,6 +73,15 @@
       >
         In Haltedauer bis {{ carData.haltedauer_datum_f }}
       </p>
+      <p class="text-pink-600 text-base font-bold" v-if="carData.abo">
+        ABO-FAHRZEUG
+      </p>
+      <p class="text-pink-600 text-base" v-if="carData.aktionsBezeichnung">
+        Aktuelle Aktion: {{ carData.aktionsBezeichnung }}
+      </p>
+      <p class="text-pink-600 text-base font-bold" v-if="carData.zugelassen_auf_sonnenwinkel">
+        Zugelassen auf Sonnenwinkel
+      </p>
       <p v-if="reserviert.timestamp" class="text-red-400 text-sm">
         Reserviert von {{ reserviert.name }} am
         {{ new Date(reserviert.timestamp).toLocaleString() }}
@@ -105,18 +114,18 @@
             class="mt-1 ml-2 bg-teal-400 text-white font-bold py-1 px-5 rounded-lg"
             v-if="user === reserviert.cnum"
             :disabled="
-              reserveComment === carData.reserviertComment || !reserveComment
+              reserveComment === carData.reserviertComment || !validReserveComment
             "
             :class="[
               {
                 'hover:bg-teal-500':
-                  reserveComment !== carData.reserviertComment ||
-                  reserveComment,
+                  reserveComment !== carData.reserviertComment &&
+                  validReserveComment,
               },
               {
                 'bg-teal-600':
                   reserveComment === carData.reserviertComment ||
-                  !reserveComment,
+                  !validReserveComment,
               },
             ]"
             @click="changeComment"
@@ -318,10 +327,38 @@
       >
         <tr
           class="hover:bg-teal-300 hover:cursor-pointer border-b"
+          v-if="carData.gw_besteuerung"
+        >
+          <td>Besteuerung</td>
+          <td>{{ carData.gw_besteuerung }}</td>
+        </tr>
+        <tr
+          class="hover:bg-teal-300 hover:cursor-pointer border-b"
+          v-if="carData.datum_finanziert_bei"
+        >
+          <td>Finanziert bei</td>
+          <td>{{ carData.datum_finanziert_bei }}</td>
+        </tr>
+        <tr
+          class="hover:bg-teal-300 hover:cursor-pointer border-b"
+          v-if="carData.standort"
+        >
+          <td>Standort</td>
+          <td>{{ carData.standort }}</td>
+        </tr>
+        <tr
+          class="hover:bg-teal-300 hover:cursor-pointer border-b"
           v-if="carData.bemerkung"
         >
           <td>Bemerkung/Hinweis</td>
           <td>{{ carData.bemerkung }}</td>
+        </tr>
+        <tr
+          class="hover:bg-teal-300 hover:cursor-pointer border-b"
+          v-if="carData.ahid"
+        >
+          <td>Eigentümer</td>
+          <td>{{ carData.ahid }}</td>
         </tr>
         <tr
           class="hover:bg-teal-300 hover:cursor-pointer border-b"
@@ -456,6 +493,9 @@ export default {
     isReserved() {
       return !!(this.reserviert && this.reserviert.cnum);
     },
+    validReserveComment() {
+      return ((s) => ((t) => /[a-zaöü.-]{3}/gi.test(t) && [...new Set(t.split(""))].length > 1)(String(s).replace(/\s/g, "")))(this.reserveComment);
+    },
     canBuy() {
       return (
         (this.carData.hersteller_dispo === "Renault" ||
@@ -566,7 +606,7 @@ export default {
       //   return;
       // }
       if (
-        !this.reserveComment ||
+        !this.validReserveComment ||
         this.reserveComment === this.carData.reserviertComment
       )
         return;
@@ -768,7 +808,7 @@ export default {
               .replace(".", ",")
               .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}€`
           : null;
-      data.zl_info = fEz(data.zl_info);
+      data.zl_info = fDatum(data.zl_info);
       data.listenpreis_upe_brutto = fPreis(data.listenpreis_upe_brutto);
       data.wwwpreis = fPreis(data.wwwpreis);
       data.haltedauer_datum_f = fDatum(data.haltedauer_datum);

@@ -56,11 +56,25 @@
                 >
                   <option>Alle</option>
                   <option>Renault</option>
+                  <option>Alpine</option>
                   <option>Seat</option>
                   <option>Jaguar</option>
                   <option>Land Rover</option>
                   <option>Dacia</option>
                   <option>CUPRA</option>
+                  <option>Mazda</option>
+                  <option>MG</option>
+                  <option>BAIC</option>
+                  <option>SERES</option>
+                  <option>DFM</option>
+                  <option>DFSK</option>
+                  <option>JAC</option>
+                  <option>SWM</option>
+                  <option>Forster</option>
+                  <option>Karmann</option>
+                  <option>Eura Mobil</option>
+                  <option>Caravelair</option>
+                  <option>Etrusco</option>
                   <option>Sonstige</option>
                 </select>
                 <input

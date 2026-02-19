@@ -203,7 +203,8 @@ Vue.prototype.$ausstattungen = [
 ];
 
 Vue.prototype.$standorte = [
-  'AA - Zentrallagerplatz',
+  'AA - Zentrallager 07',
+  'AA - Zentrallager Müllerstraße',
   'FIL - 02 - RD - Röhrsdorf',
   'FIL - 03 - BS - Burgstädt',
   'FIL - 04 - FB - Frankenberg',
@@ -212,14 +213,16 @@ Vue.prototype.$standorte = [
   'FIL - 07 - CH - Chemnitz',
   'FIL - 08 - BC - ChemnitzBC',
   'FIL - 09 - ZK - Zwickau',
-  'FIL - 10 - HO - Hof-BC',
+  'FIL - 10 - HO - Hof',
   'FIL - 11 - PL - Plauen',
-  'FIL - 12 - HO - Hof LR',
+  'FIL - 12 - HO - Hof-GW',
   'FIL - 13 - ZS - ZwickauBC',
   'FIL - 13 - ZS - Lager',
   'FIL - 14 - FG - Freiberg',
   'FIL - 15 - PS - Plauen-SE',
   'FIL - 16 - CS - Chemnitz-SE',
+  'FIL - 17 - MA - Marienberg',
+  'FIL - 18 - ME - Meerane',
 ];
 
 Vue.prototype.$eigentuemer = [
@@ -241,6 +244,8 @@ Vue.prototype.$eigentuemer = [
   { value: 'BOCH', key: 'BOCH' },
   { value: 'BOZK', key: 'BOZK' },
   { value: 'BOHO', key: 'BOHO' },
+  { value: 'RHMA', key: 'RHMA' },
+  { value: 'MZME', key: 'MZME' },
 ];
 
 Vue.prototype.$kraftstoff = [
