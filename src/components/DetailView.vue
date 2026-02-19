@@ -793,14 +793,6 @@ export default {
               new Date(datum)
             )
           : null;
-      const fEz = (ez) =>
-        ez
-          ? ((d) =>
-              `${String(d.getUTCMonth() + 1).padStart(
-                2,
-                "0"
-              )}/${d.getUTCFullYear()}`)(new Date(ez))
-          : null;
       const fPreis = (d) =>
         d
           ? `${d
