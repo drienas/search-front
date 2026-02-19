@@ -5,36 +5,39 @@ on:
     tags:
       - '*'
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
 
     env:
-      OWNER: drienas
-      REPO: search-front
-      PACKAGE: dsg-search-front
+      REGISTRY: ghcr.io
+      IMAGE_NAME: drienas/dsg-search-front
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
 
       - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
 
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag docker.pkg.github.com/${{ env.OWNER }}/${{ env.REPO }}/${{ env.PACKAGE }}:${{ steps.get_version.outputs.VERSION }}
+        run: docker build . --file Dockerfile --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
 
       - name: Deploy the Docker image
-        run: docker push docker.pkg.github.com/${{ env.OWNER }}/${{ env.REPO }}/${{ env.PACKAGE }}:${{ steps.get_version.outputs.VERSION }}
+        run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
 
       - name: Docker tag latest
-        run: docker tag docker.pkg.github.com/${{ env.OWNER }}/${{ env.REPO }}/${{ env.PACKAGE }}:${{ steps.get_version.outputs.VERSION }} docker.pkg.github.com/${{ env.OWNER }}/${{ env.REPO }}/${{ env.PACKAGE }}
+        run: docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
       - name: Docker push latest
-        run: docker push docker.pkg.github.com/${{ env.OWNER }}/${{ env.REPO }}/${{ env.PACKAGE }}
+        run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
   cloud-update:
     needs: publish
